@@ -44,3 +44,6 @@ fclean : clean
 	@echo ./prog
 
 re : fclean all
+
+exec: fclean
+	./prog
