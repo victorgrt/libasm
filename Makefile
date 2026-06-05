@@ -30,7 +30,7 @@ $(NAME) : $(OBJ)
 
 clean :
 	@echo -n 🚮 rm -f $(OBJ)
-	@echo ""
+	rm -f ${OBJ}
 
 fclean : clean
 	@echo -n 🚮 rm -f $(NAME_LIB)
@@ -42,6 +42,8 @@ fclean : clean
 	@echo $(NAME_LIB)
 	@echo $(OBJ)
 	@echo ./prog
+	@rm -f ${NAME_LIB}
+	@rm -f ./prog
 
 re : fclean all
 

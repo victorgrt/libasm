@@ -1,6 +1,7 @@
 ; movzx:
 ; AL = 0x05  → EAX = 0x00000005
 ; BL = 0x03  → EBX = 0x00000003
+; without movzx EAX could be = 0x112246545 making the substraction wrong
 
 
 section .text
