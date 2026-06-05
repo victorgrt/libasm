@@ -1,12 +1,7 @@
-;int strCmp( const char *s1, const char *s2 )
-;{
-;    const unsigned char *p1 = ( const unsigned char * )s1;
-;    const unsigned char *p2 = ( const unsigned char * )s2;
-;
-;    while ( *p1 && *p1 == *p2 ) ++p1, ++p2;
-;
-;    return ( *p1 > *p2 ) - ( *p2  > *p1 );
-;}
+; movzx:
+; AL = 0x05  → EAX = 0x00000005
+; BL = 0x03  → EBX = 0x00000003
+
 
 section .text
     global ft_strcmp
@@ -17,26 +12,26 @@ ft_strcmp:
 
 
 .loop:
-    mov     al, [rdi]       ; charger un octet depuis s1
-    mov     bl, [rsi]       ; charger un octet depuis s2
+    mov     al, [rdi]       ; load one byte of s1 into al
+    mov     bl, [rsi]       ; load one byte of s2 into bl
     
-    cmp     al, bl          ; comparer
-    jne     .not_equal
+    cmp     al, bl          ; compare the two bytes
+    jne     .not_equal      ; if not equal then jump to not_equal
 
-    test    al, al
-    je      .equal
+    test    al, al          ; is current byt "\0" ?
+    je      .equal          ; both strings ended at the same time -> strings are the same
 
     inc     rdi             ; s1++
     inc     rsi             ; s2++
     
-    jmp     .loop
+    jmp     .loop           ; repeat loop
 
 .not_equal:
-    movzx   eax, al         ;
-    movzx   ebx, bl         ;
-    sub     eax, ebx        ;
-    ret
+    movzx   eax, al         ; convert from 1 byte to 32 clean bytes
+    movzx   ebx, bl         ; convert from 1 byte to 32 clean bytes
+    sub     eax, ebx        ; substract s1 -s2 to have correct return value
+    ret                     ; return substraction result -> end of function
 
 .equal:
-    xor     eax, eax; retour 0 si egal
+    xor     eax, eax        ; set return value to 0
     ret
