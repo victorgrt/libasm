@@ -23,5 +23,6 @@ ft_strdup:
     ret
 
 .error:
+    pop rsi
     mov rax, 0
     ret
