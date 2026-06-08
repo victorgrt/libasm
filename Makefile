@@ -1,17 +1,15 @@
-NAME = libasm
+NAME = libasm.a
 
-NAME_LIB = libasm.a
-
-SRCS = 	./src/ft_write.s \
+SRCS =	./src/ft_write.s \
 		./src/ft_read.s \
 		./src/ft_strcmp.s \
 		./src/ft_strcpy.s \
 		./src/ft_strdup.s \
-		./src/ft_strlen.s \
+		./src/ft_strlen.s
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror 
+CFLAGS = -Wall -Wextra -Werror
 
 NASM = nasm
 
@@ -19,33 +17,26 @@ NASMFLAGS = -f elf64
 
 OBJ = $(SRCS:.s=.o)
 
-%.o : %.s
+all: $(NAME) prog
+
+$(NAME): $(OBJ)
+	ar rcs $(NAME) $(OBJ)
+
+prog: $(NAME) src/main.c src/libasm.h
+	$(CC) $(CFLAGS) src/main.c $(NAME) -o prog
+
+%.o: %.s
 	$(NASM) $(NASMFLAGS) $< -o $@
 
-all : $(NAME)
+clean:
+	rm -f $(OBJ)
 
-$(NAME) : $(OBJ)
-	ar rcs $(NAME_LIB) $(OBJ)
-	$(CC) -o prog $(CFLAGS) ./src/main.c $(NAME_LIB)
+fclean: clean
+	rm -f $(NAME) prog
 
-clean :
-	@echo -n 🚮 rm -f $(OBJ)
-	rm -f ${OBJ}
+re: fclean all
 
-fclean : clean
-	@echo -n 🚮 rm -f $(NAME_LIB)
-	@echo ""
-	@echo -n 🚮 rm -f ./prog
-	@sleep 0.2
-	@echo "\n✅Cleaned files:"
-	@sleep 0.2
-	@echo $(NAME_LIB)
-	@echo $(OBJ)
-	@echo ./prog
-	@rm -f ${NAME_LIB}
-	@rm -f ./prog
-
-re : fclean all
-
-exec: fclean
+exec: all
 	./prog
+
+.PHONY: all clean fclean re exec prog
